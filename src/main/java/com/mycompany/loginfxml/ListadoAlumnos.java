@@ -23,6 +23,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import models.Alumno;
+import models.Empresa;
 import models.Producto;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -31,26 +33,18 @@ import org.hibernate.query.Query;
 public class ListadoAlumnos implements Initializable {
 
     @FXML
-    private TableView<Producto> tabla;
+    private TableView<Alumno> tabla;
     @FXML
-    private TableColumn<Producto, Integer> cId;
+    private TableColumn<Alumno, Integer> cId;
     @FXML
-    private TableColumn<Producto, String> cNombre;
-    private TableColumn<Producto, String> cTipo;
-    private TableColumn<Producto, Integer> cPrecio;
-    private TableColumn<Producto, String> cDisponibilidad;
-
+    private TableColumn<Alumno, String> cNombre;
     @FXML
-    private MenuItem menuSalir;
+    private TableColumn<Alumno, String> cApellidos;
+    @FXML
+    private TableColumn<Alumno, String> cDni;
+    @FXML
+    private TableColumn<Alumno, String> cEmpresa;
     
-    @FXML
-    private TextField textNombre;
-    @FXML
-    private TextField textTipo;
-    @FXML
-    private TextField textPrecio;
-    @FXML
-    private ComboBox<String> comboDisponibilidad;
     @FXML
     private Button btnAñadir;
     @FXML
@@ -58,36 +52,35 @@ public class ListadoAlumnos implements Initializable {
     @FXML
     private Button btnBorrar;
     @FXML
-    private Button btnSalir;
+    private Button btnSalir; 
+    @FXML
+    private MenuItem menuSalir; 
+    @FXML
+    private TextField txtNombre;
+    @FXML
+    private TextField txtApellidos;
+    @FXML
+    private TextField txtDni;
+    @FXML
+    private ComboBox<String> comboEmpresa;
     @FXML
     private Label detalle;
-    private Producto productoActual = null;
-    @FXML
-    private Button btnPedidos;
-    @FXML
-    private TableColumn<?, ?> cApellidos;
-    @FXML
-    private TableColumn<?, ?> cDni;
-    @FXML
-    private TableColumn<?, ?> cEmpresa;
+   
+    private Alumno alumnoActual = null;
     
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-        ObservableList<String> items = FXCollections.observableArrayList();
-        items.addAll("DISPONIBLE", "AGOTADO");
-        
 
-        cId.setCellValueFactory(new PropertyValueFactory("idPro"));
+        cId.setCellValueFactory(new PropertyValueFactory("id"));
         cNombre.setCellValueFactory(new PropertyValueFactory("nombre"));
-        cTipo.setCellValueFactory(new PropertyValueFactory("tipo"));
-        cPrecio.setCellValueFactory(new PropertyValueFactory("precio"));
-        cDisponibilidad.setCellValueFactory(new PropertyValueFactory("disponibilidad"));
-        comboDisponibilidad.setItems(items);
+        cApellidos.setCellValueFactory(new PropertyValueFactory("apellidos"));
+        cDni.setCellValueFactory(new PropertyValueFactory("dni"));
+        cEmpresa.setCellValueFactory(new PropertyValueFactory("empresa"));
 
         btnActualizar.setDisable(true);
         btnBorrar.setDisable(true);
+        llenarCombo();
         
 
         actualizarTabla();
@@ -97,141 +90,139 @@ public class ListadoAlumnos implements Initializable {
     @FXML
     private void mostrarCarta(MouseEvent event) {
 
-        Producto producto = tabla.getSelectionModel().getSelectedItem();
+        Alumno alumno = tabla.getSelectionModel().getSelectedItem();
 
         System.out.println(tabla.getSelectionModel().getSelectedIndex());
 
-        if (producto != null) {
+        if (alumno != null) {
             
-            textNombre.setText(producto.getNombre());
-            textTipo.setText(producto.getTipo());
-            textPrecio.setText(String.valueOf(producto.getPrecio()));
-            comboDisponibilidad.setValue(producto.getDisponibilidad());
+            txtNombre.setText(alumno.getNombre());
+            txtApellidos.setText(alumno.getApellidos());
+            txtDni.setText(alumno.getDni());
+            comboEmpresa.setValue(alumno.getEmpresa().getNombre());
 
-            productoActual = producto;
+            alumnoActual = alumno;
 
             btnActualizar.setDisable(false);
             btnBorrar.setDisable(false);
 
-            System.out.println(productoActual);
+            System.out.println(alumnoActual);
 
         }
     }
 
     private void actualizarTabla() {
-        ArrayList<Producto> productos = new ArrayList<>();
+        ArrayList<Alumno> alumnos = new ArrayList<>();
         try ( Session s = HibernateUtil.getSessionFactory().openSession()) {
             System.out.println("Conexión realizada con éxito");
 
-            Query q = s.createQuery("from Producto");
-            productos = (ArrayList<Producto>) q.list();
+            Query q = s.createQuery("from Alumno");
+            alumnos = (ArrayList<Alumno>) q.list();
         }
         tabla.getItems().clear();
-        tabla.getItems().addAll(productos);
+        tabla.getItems().addAll(alumnos);
 
     }
-
-    private Producto leerFormulario() {
-        String nombre = textNombre.getText();
-        String tipo = textTipo.getText();
-        int precio = Integer.parseInt(textPrecio.getText());
-        String disponibilidad = comboDisponibilidad.getValue();
-
-        if ("".equals(nombre) || "".equals(tipo) || "".equals(precio) || "".equals(disponibilidad)) {
-            detalle.setText("No puedes añadir un producto vacío");
-            return null;
-        } else {
-            Producto p = new Producto();
-            p.setNombre(nombre);
-            p.setTipo(tipo);
-            p.setPrecio(precio);
-            p.setDisponibilidad(disponibilidad);
-            return p;
-        }
-    }
+//
+//    private Producto leerFormulario() {
+//        String nombre = textNombre.getText();
+//        String tipo = textTipo.getText();
+//        int precio = Integer.parseInt(textPrecio.getText());
+//        String disponibilidad = comboDisponibilidad.getValue();
+//
+//        if ("".equals(nombre) || "".equals(tipo) || "".equals(precio) || "".equals(disponibilidad)) {
+//            detalle.setText("No puedes añadir un producto vacío");
+//            return null;
+//        } else {
+//            Producto p = new Producto();
+//            p.setNombre(nombre);
+//            p.setTipo(tipo);
+//            p.setPrecio(precio);
+//            p.setDisponibilidad(disponibilidad);
+//            return p;
+//        }
+//    }
 
     
-    @FXML
-    private void añadirProducto(ActionEvent event) {
-  
-        Producto p = leerFormulario();
+//    @FXML
+//    private void añadirProducto(ActionEvent event) {
+//  
+//        Producto p = leerFormulario();
+//
+//        if (p != null) {
+//            try ( Session s = HibernateUtil.getSessionFactory().openSession()) {
+//                Transaction t = s.beginTransaction();
+//                s.save(p);
+//                t.commit();
+//
+//                actualizarTabla();
+//                detalle.setText("Producto nuevo añadido con éxito!");
+//
+//                productoActual = p;
+//
+//                borrarFormulario();
+//            }
+//        }
+//    }
 
-        if (p != null) {
-            try ( Session s = HibernateUtil.getSessionFactory().openSession()) {
-                Transaction t = s.beginTransaction();
-                s.save(p);
-                t.commit();
+//    private void borrarProducto(ActionEvent event) {
+//
+//        if ((productoActual != null) && pedirConfirmacion()) {
+//
+//            try ( Session s = HibernateUtil.getSessionFactory().openSession()) {
+//                Transaction t = s.beginTransaction();
+//                s.delete(productoActual);
+//                t.commit();
+//
+//                productoActual = null;
+//
+//                actualizarTabla();
+//
+//                borrarFormulario();
+//                detalle.setText("El producto ha sido borrado con éxito");
+//            }
+//
+//        }
+//    }
 
-                actualizarTabla();
-                detalle.setText("Producto nuevo añadido con éxito!");
+//    private void borrarFormulario() {
+//        
+//        textNombre.setText("");
+//        textTipo.setText("");
+//        textPrecio.setText("");
+//        comboDisponibilidad.setValue("");
+//        btnActualizar.setDisable(true);
+//    }
+//
+//    private Boolean pedirConfirmacion() {
+//        Alert confirmacion = new Alert(AlertType.CONFIRMATION);
+//        confirmacion.setTitle("Borrar");
+//        confirmacion.setHeaderText("Solicitud de borrado");
+//        confirmacion.setContentText("El producto " + productoActual.getNombre() + " va a ser borrado.");
+//        var result = confirmacion.showAndWait();
+//        return (result.get()) == ButtonType.OK;
+//    }
 
-                productoActual = p;
-
-                borrarFormulario();
-            }
-        }
-    }
-
-    @FXML
-    private void borrarProducto(ActionEvent event) {
-
-        if ((productoActual != null) && pedirConfirmacion()) {
-
-            try ( Session s = HibernateUtil.getSessionFactory().openSession()) {
-                Transaction t = s.beginTransaction();
-                s.delete(productoActual);
-                t.commit();
-
-                productoActual = null;
-
-                actualizarTabla();
-
-                borrarFormulario();
-                detalle.setText("El producto ha sido borrado con éxito");
-            }
-
-        }
-    }
-
-    private void borrarFormulario() {
-        
-        textNombre.setText("");
-        textTipo.setText("");
-        textPrecio.setText("");
-        comboDisponibilidad.setValue("");
-        btnActualizar.setDisable(true);
-    }
-
-    private Boolean pedirConfirmacion() {
-        Alert confirmacion = new Alert(AlertType.CONFIRMATION);
-        confirmacion.setTitle("Borrar");
-        confirmacion.setHeaderText("Solicitud de borrado");
-        confirmacion.setContentText("El producto " + productoActual.getNombre() + " va a ser borrado.");
-        var result = confirmacion.showAndWait();
-        return (result.get()) == ButtonType.OK;
-    }
-
-    @FXML
-    private void actualizarProducto (ActionEvent event) {
-
-        if (productoActual != null) {
-
-            productoActual.setNombre(textNombre.getText());
-            productoActual.setTipo(textTipo.getText());
-            productoActual.setPrecio(Integer.parseInt(textPrecio.getText()));
-            productoActual.setDisponibilidad(comboDisponibilidad.getValue());
-
-            try ( Session s = HibernateUtil.getSessionFactory().openSession()) {
-                Transaction t = s.beginTransaction();
-                s.update(productoActual);
-                t.commit();
-
-                actualizarTabla();
-                detalle.setText("Producto actualizado con éxito");
-
-            }
-        }
-    }
+//    private void actualizarProducto (ActionEvent event) {
+//
+//        if (productoActual != null) {
+//
+//            productoActual.setNombre(textNombre.getText());
+//            productoActual.setTipo(textTipo.getText());
+//            productoActual.setPrecio(Integer.parseInt(textPrecio.getText()));
+//            productoActual.setDisponibilidad(comboDisponibilidad.getValue());
+//
+//            try ( Session s = HibernateUtil.getSessionFactory().openSession()) {
+//                Transaction t = s.beginTransaction();
+//                s.update(productoActual);
+//                t.commit();
+//
+//                actualizarTabla();
+//                detalle.setText("Producto actualizado con éxito");
+//
+//            }
+//        }
+//    }
 
 
 
@@ -254,15 +245,40 @@ public class ListadoAlumnos implements Initializable {
         }
     }
     
-    public ArrayList<Producto> traerProductos() {
-        ArrayList<Producto> productos = new ArrayList<>();
+    public ArrayList<Alumno> traerAlumnos() {
+        ArrayList<Alumno> alumnos = new ArrayList<>();
         try ( Session s = HibernateUtil.getSessionFactory().openSession()) {
-            Query q = s.createQuery("from Producto");
-            productos = (ArrayList<Producto>) q.list();
+            Query q = s.createQuery("from Alumno");
+            alumnos = (ArrayList<Alumno>) q.list();
         }
        
-        return productos;
+        return alumnos;
 
+    }
+    
+    public ArrayList<Empresa> traerEmpresas() {
+        ArrayList<Empresa> empresas = new ArrayList<>();
+        try ( Session s = HibernateUtil.getSessionFactory().openSession()) {
+            Query q = s.createQuery("from Empresa");
+            empresas = (ArrayList<Empresa>) q.list();
+        }
+       
+        return empresas;
+
+    }
+    
+    public void llenarCombo(){
+        
+        ObservableList<String> empresas = FXCollections.observableArrayList();
+        for(Empresa p : traerEmpresas()){
+            
+            String nombre = p.getNombre();
+            empresas.add(nombre);
+        }
+        comboEmpresa.setItems(empresas);
+        
+        
+        
     }
 
     @FXML
@@ -270,13 +286,11 @@ public class ListadoAlumnos implements Initializable {
     }
 
     @FXML
-    private void irPedidos(ActionEvent event) {
-        
-        try {
-            App.setRoot("pedidos");
-        } catch (IOException ex) {
-            Logger.getLogger(ListadoAlumnos.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    private void actualizarAlumno(ActionEvent event) {
+    }
+
+    @FXML
+    private void borrarAlumno(ActionEvent event) {
     }
 
 
