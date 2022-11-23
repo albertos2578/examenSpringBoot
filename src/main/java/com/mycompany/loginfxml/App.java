@@ -22,8 +22,9 @@ public class App extends Application {
         stage.setScene(scene);
         stage.setTitle("Gestor de Comandas");
         stage.setMinWidth(900);
-        stage.setMinHeight(700);
+        stage.setMinHeight(700);//ioewdwoidmowd
 //        stage.setFullScreen(true);
+//pureba
         stage.show();
     }
 
