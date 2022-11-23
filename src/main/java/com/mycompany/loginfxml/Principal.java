@@ -2,6 +2,7 @@ package com.mycompany.loginfxml;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,7 +13,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import models.Alumno;
+import models.Producto;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 public class Principal implements Initializable{
 
@@ -21,11 +25,11 @@ public class Principal implements Initializable{
     @FXML
     private Label info;
     @FXML
-    private Button btnCarta;
-    @FXML
     private Button btnComandas;
     @FXML
     private Button btnSalir;
+    @FXML
+    private Button btnAlumnos;
 
   
 
@@ -34,9 +38,11 @@ public class Principal implements Initializable{
         try( Session s = HibernateUtil.getSessionFactory().openSession()){
             System.out.println("Conexión realizada con éxito");
         }
+        
+        System.out.println(traerAlumnos());
+        
     }
 
-    @FXML
     private void verCarta(ActionEvent event) {
         try {
             App.setRoot("carta");
@@ -58,6 +64,29 @@ public class Principal implements Initializable{
     private void Salir(ActionEvent event) {
         
     System.exit(0);
+    }
+
+    @FXML
+    private void verAlumnos(ActionEvent event) {
+        
+        try {
+            App.setRoot("listadoAlumnos");
+        } catch (IOException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private ArrayList<Alumno> traerAlumnos() {
+        ArrayList<Alumno> alumnos = new ArrayList<>();
+        try ( Session s = HibernateUtil.getSessionFactory().openSession()) {
+            System.out.println("Conexión realizada con éxito");
+
+            Query q = s.createQuery("from Alumno");
+            alumnos = (ArrayList<Alumno>) q.list();
+        }
+        
+        return alumnos;
+
     }
 
     

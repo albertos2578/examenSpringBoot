@@ -12,7 +12,7 @@
    <center>
       <HBox alignment="CENTER" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btnCarta" mnemonicParsing="false" onAction="#verCarta" prefHeight="90.0" prefWidth="175.0" text="Ver Carta">
+            <Button fx:id="btnAlumnos" mnemonicParsing="false" onAction="#verAlumnos" prefHeight="90.0" prefWidth="175.0" text="Ver Alumnos">
                <font>
                   <Font size="16.0" />
                </font>
