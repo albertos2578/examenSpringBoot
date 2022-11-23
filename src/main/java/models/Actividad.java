@@ -90,7 +90,7 @@ public class Actividad implements Serializable {
 
     @Override
     public String toString() {
-        return "Actividad{" + "id=" + id + ", fecha=" + fecha + ", tipo_practica=" + tipo_practica + ", horas_dia=" + horas_dia + ", nombre=" + nombre + ", observaciones=" + observaciones + ", alumno=" + alumno + '}';
+        return "Actividad{" + "id=" + id + ", fecha=" + fecha + ", tipo_practica=" + tipo_practica + ", horas_dia=" + horas_dia + ", nombre=" + nombre + ", observaciones=" + observaciones + ", alumno=" + alumno.getNombre() + '}';
     }
     
     

@@ -81,7 +81,7 @@ public class Principal implements Initializable{
         try ( Session s = HibernateUtil.getSessionFactory().openSession()) {
             System.out.println("Conexión realizada con éxito");
 
-            Query q = s.createQuery("from Alumno");
+            Query q = s.createQuery("from Actividad");
             alumnos = (ArrayList<Alumno>) q.list();
         }
         

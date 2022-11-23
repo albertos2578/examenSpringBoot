@@ -84,7 +84,8 @@ public class Profesor implements Serializable {
     public String toString() {
         return "Profesor{" + "id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", password=" + password + ", email=" + email + ", alumnos=" + alumnos + '}';
     }
-    
+
+   
     
     
     

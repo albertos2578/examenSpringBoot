@@ -95,7 +95,7 @@ public class Empresa implements Serializable {
     public String toString() {
         return "Empresa{" + "id=" + id + ", nombre=" + nombre + ", telefono=" + telefono + ", email=" + email + ", responsable=" + responsable + ", observaciones=" + observaciones + ", alumnos=" + alumnos + '}';
     }
-    
+
     
     
     

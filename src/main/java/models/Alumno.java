@@ -37,6 +37,7 @@ public class Alumno implements Serializable {
     int horas_fct;
     String observaciones;
     
+    
     @OneToMany( mappedBy="alumno", fetch=FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Actividad> actividades;
     
@@ -162,10 +163,14 @@ public class Alumno implements Serializable {
 
     @Override
     public String toString() {
-        return "Alumno{" + "id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", password=" + password + ", dni=" + dni + ", fecha_nac=" + fecha_nac + ", email=" + email + ", telefono=" + telefono + ", horas_dual=" + horas_dual + ", horas_fct=" + horas_fct + ", observaciones=" + observaciones + ", empresa=" + empresa + '}';
+        return "Alumno{" + "id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos +
+                ", dni=" + dni + ", email=" + email + ", telefono=" + telefono + ", profesor="
+                + profesor.nombre + ", empresa=" + empresa.nombre+", actividades=" + actividades +'}';
     }
 
     
+
+   
     
     
 
