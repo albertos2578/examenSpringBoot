@@ -15,7 +15,7 @@ import javafx.scene.input.KeyCombination;
 public class App extends Application {
 
     private static Scene scene;
-
+///aaaaa
     @Override
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("principal"), 640, 480);
