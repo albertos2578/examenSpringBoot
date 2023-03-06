@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Spring_0.demo.libro;
+package Spring_0.demo.models;
 
 import jakarta.annotation.Generated;
 import jakarta.persistence.Column;
@@ -17,25 +17,25 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "biblioteca")
-public class Libros implements Serializable {
+@Table(name = "alumnado")
+public class alumnado implements Serializable {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private int id;
 
-    @Column(name = "titulo")
-    private String titulo;
+    @Column(name = "nombre")
+    private String nombre;
 
-    @Column(name = "autor")
-    private String autor;
-    @Column(name = "categoria")
-    private String categoria;
+    @Column(name = "telefono")
+    private String telefono;
+    @Column(name = "email")
+    private String email;
 
-    @Column(name = "edicion")
-    private int edicion;
+    @Column(name = "ad")
+    private double ad;
     
-    @Column(name = "ISBN")
-    private Long ISBN;
+    @Column(name = "di")
+    private double di;
 
 }
